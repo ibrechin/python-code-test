@@ -4,3 +4,4 @@ psycopg2>=2.6.2,<2.7
 djangorestframework>=3.9.4,<3.10
 requests>=2.21.0,<2.22
 responses>=0.10.6,<0.11
+django-filter>=2.1.0,<2.2

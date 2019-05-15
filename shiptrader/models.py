@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.timezone import now
 
 
 class Starship(models.Model):
@@ -17,3 +18,5 @@ class Listing(models.Model):
     name = models.CharField(max_length=255)
     ship_type = models.ForeignKey(Starship, related_name='listings')
     price = models.IntegerField()
+    active = models.BooleanField(default=True)
+    last_listed = models.DateTimeField(default=now)
