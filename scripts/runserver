@@ -7,4 +7,5 @@ done
 
 export PYTHONUNBUFFERED=0
 ./manage.py migrate
+./manage.py load_starships --replace
 ./manage.py runserver 0.0.0.0:8008
