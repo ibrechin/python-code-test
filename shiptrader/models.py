@@ -5,12 +5,12 @@ class Starship(models.Model):
     starship_class = models.CharField(max_length=255)
     manufacturer = models.CharField(max_length=255)
 
-    length = models.FloatField()
-    hyperdrive_rating = models.FloatField()
-    cargo_capacity = models.BigIntegerField()
+    length = models.FloatField(blank=True, null=True)
+    hyperdrive_rating = models.FloatField(blank=True, null=True)
+    cargo_capacity = models.BigIntegerField(blank=True, null=True)
 
-    crew = models.IntegerField()
-    passengers = models.IntegerField()
+    crew = models.IntegerField(blank=True, null=True)
+    passengers = models.IntegerField(blank=True, null=True)
 
 
 class Listing(models.Model):
