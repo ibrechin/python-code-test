@@ -95,7 +95,7 @@ class ListingTestCase(APITestCase):
         Listing(name='Victory', price=10, ship_type=starship_1).save()
         Listing(
             name='Arrow', price=50, ship_type=starship_2,
-            last_listed=now() - timedelta(days=3) 
+            last_listed=now() - timedelta(days=3)
         ).save()
 
         response = self.client.get(
@@ -127,4 +127,33 @@ class ListingTestCase(APITestCase):
         self.assertEqual(
             response.data['results'][0]['name'],
             'Victory'
+        )
+
+    def test_deactivate_listing(self):
+        starship_1 = Starship.objects.all()[0]
+        listing = Listing(name='Victory', price=10, ship_type=starship_1)
+        listing.save()
+
+        response = self.client.post(
+            reverse('listing-deactivate', kwargs={'pk': listing.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Listing.objects.get(pk=listing.id).active)
+
+    def test_activate_listing(self):
+        starship_1 = Starship.objects.all()[0]
+        listing = Listing(
+            name='Victory', price=10, ship_type=starship_1,
+            active=False, last_listed=now() - timedelta(days=3)
+        )
+        listing.save()
+
+        response = self.client.post(
+            reverse('listing-activate', kwargs={'pk': listing.id}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertTrue(Listing.objects.get(pk=listing.id).active)
+        self.assertLess(
+            now() - Listing.objects.get(pk=listing.id).last_listed,
+            timedelta(seconds=1)
         )
