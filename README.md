@@ -1,59 +1,47 @@
-# Ostmodern Python Code Test
+# Starship Listing API
 
-The goal of this exercise is to test that you know your way around Django and
-REST APIs. Approach it the way you would an actual long-term project.
+This API allows for the creation of starship sale listings. The root of the API is at `/api/` - if you request this path it will return the available endpoints. You can also explore the API using a web browser.
 
-The idea is to build a platform on which your users can buy and sell Starships.
-To make this process more transparent, it has been decided to source some
-technical information about the Starships on sale from the [Starship
-API](https://swapi.co/documentation#starships).
+# Endpoints
 
-A Django project some initial data models have been created already. You may need
-to do some additional data modelling to satify the requirements.
+## Starships
 
-## Getting started
+The starship endpoint `/api/starships/` lists the available ship types and their IDs. You will need the ID of the relevant ship type when creating a listing.
 
-* This test works with either
-  [Docker](https://docs.docker.com/compose/install/#install-compose) or
-  [Vagrant](https://www.vagrantup.com/downloads.html)
-* Get the code from `https://github.com/ostmodern/python-code-test`
-* Do all your work in your own `develop` branch
-* Once you have downloaded the code the following commands will get the site up
-  and running
+## Listings
 
-```shell
-# For Docker
-docker-compose up
-# You can run `manage.py` commands using the `./manapy` wrapper
+The listings API allows for the creation and retrieval of sale listings. To create a listing, make a POST to `/api/listings/` with the fields `name`, `price` and `ship_type`. `ship_type` should be the ID of an existing starship.
 
-# For Vagrant
-vagrant up
-vagrant ssh
-# Inside the box
-./manage.py runserver 0.0.0.0:8008
+Listings can be retrieved by a GET request to `/api/listings/`. You can use query parameters to order and filter the returned list. You can filter by `starship_class` and `active` status.
+
+e.g. to filter by `starship_class`:
+
 ```
-* The default Django "It worked!" page should now be available at
-  http://localhost:8008/
+/api/listings/?starship_class=cruiser
+```
 
-## Tasks
+You can also order by `price` or `last_listed` using the `ordering` parameter.
 
-Your task is to build a JSON-based REST API for your frontend developers to
-consume. You have built a list of user stories with your colleagues, but you get
-to decide how to design the API. Remember that the frontend developers will need
-some documentation of your API to understand how to use it.
+e.g. to order by `price`:
 
-We do not need you to implement users or authentication, to reduce the amount of
-time this exercise will take to complete. You may use any external libraries you
-require.
+```
+/api/listings/?ordering=price
+```
 
-* We need to be able to import all existing
-  [Starships](https://swapi.co/documentation#starships) to the provided Starship
-  Model
-* A potential buyer can browse all Starships
-* A potential buyer can browse all the listings for a given `starship_class`
-* A potential buyer can sort listings by price or time of listing
-* To list a Starship as for sale, the user should supply the Starship name and
-  list price
-* A seller can deactivate and reactivate their listing
+### Activating and deactivating listings
 
-After you are done, create a release branch in your repo and send us the link.
+You can activate and deactivate a listing by POSTing to the relevant action endpoints.
+
+e.g. to deactivate listing with ID 1, POST to:
+
+```
+/api/listings/1/deactivate/
+```
+
+and to reactivate:
+
+```
+/api/listings/1/activate/
+```
+
+The `last_listed` timestamp is updated when a listing is reactivated. It is recommended that when retrieving listings for display, you should filter them with `active=true`.

@@ -19,7 +19,7 @@ class StarshipView(
 class ListingFilter(django_filters.FilterSet):
     starship_class = django_filters.CharFilter(
         field_name='ship_type__starship_class'
-    )    
+    )
 
     class Meta:
         model = Listing

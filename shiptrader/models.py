@@ -13,6 +13,9 @@ class Starship(models.Model):
     crew = models.IntegerField(blank=True, null=True)
     passengers = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return '{}: {}, {}'.format(self.pk, self.manufacturer, self.starship_class)
+
 
 class Listing(models.Model):
     name = models.CharField(max_length=255)
@@ -20,3 +23,6 @@ class Listing(models.Model):
     price = models.IntegerField()
     active = models.BooleanField(default=True)
     last_listed = models.DateTimeField(default=now)
+
+    def __str__(self):
+        return '{}: {}, {}'.format(self.pk, self.name, self.price)
